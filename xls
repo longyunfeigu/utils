@@ -1,0 +1,28 @@
+import xlwt
+import csv
+import os
+
+def csv_to_excel(filename):
+    workbook = xlwt.Workbook(encoding="utf8")
+    worksheet = workbook.add_sheet("My Worksheet")
+    font = xlwt.Font()
+    font.name = "Times New Romam"
+    font.italic = True
+    # 设置对其方式
+    alignment = xlwt.Alignment()  # Create Alignment
+    alignment.horz = xlwt.Alignment.HORZ_CENTER  # May be: HORZ_GENERAL, HORZ_LEFT, HORZ_CENTER, HORZ_RIGHT, HORZ_FILLED, HORZ_JUSTIFIED, HORZ_CENTER_ACROSS_SEL, HORZ_DISTRIBUTED
+    alignment.vert = xlwt.Alignment.VERT_CENTER
+    style = xlwt.XFStyle()
+    style.font = font
+    style.alignment = alignment
+    with open(filename) as f:
+        f_csv = csv.reader(f)
+        line_num = 0
+        for row in f_csv:
+            col_num = 0
+            for item in row:
+                worksheet.write(line_num, col_num, label=item, style=style)
+                col_num += 1
+            line_num += 1
+        filename_prefix = os.path.splitext(filename)[0]
+        workbook.save("{}.xls".format(filename_prefix))
